@@ -10,13 +10,13 @@
 
 ---
 
-## ⚡ Highlights & Key Features
+## Highlights & Key Features
 
-- 🚀 **1-Click Auto-Detection**: Automatically identifies the active book ID, title, author(s), cover thumbnail, and chapter tree from any `learning.oreilly.com` reader page.
-- 📱 **Kindle & E-Reader Ready**: Produces valid **EPUB 3** with backward-compatible **EPUB 2 NCX** navigation (`toc.ncx` + `toc.xhtml`). Works natively on **Kindle (Send to Kindle / Scribe), Apple Books, Kobo, Onyx Boox, PocketBook, and Calibre**.
-- 🖼️ **Illustration & Image Preservation**: Extracts high-resolution diagrams, code snippets, and charts, rebinding them directly inside `OEBPS/images/` for full offline reading.
-- 🛡️ **Anti-Ban & Rate-Limit Safeguard**: Includes customizable delay intervals between chapter downloads to ensure safe browsing and prevent account throttling.
-- 🔒 **Privacy-First & Standalone**: Zero external dependencies, telemetry, or remote servers. Uses a bundled `JSZip` library running entirely in your browser session.
+- **1-Click Auto-Detection**: Automatically identifies the active book ID, title, author(s), cover thumbnail, and chapter tree from any `learning.oreilly.com` reader page.
+- **Kindle & E-Reader Ready**: Produces valid **EPUB 3** with backward-compatible **EPUB 2 NCX** navigation (`toc.ncx` + `toc.xhtml`). Works natively on **Kindle (Send to Kindle / Scribe), Apple Books, Kobo, Onyx Boox, PocketBook, and Calibre**.
+- **Illustration & Image Preservation**: Extracts high-resolution diagrams, code snippets, and charts, rebinding them directly inside `OEBPS/images/` for full offline reading.
+- **Anti-Ban & Rate-Limit Safeguard**: Includes customizable delay intervals between chapter downloads to ensure safe browsing and prevent account throttling.
+- **Privacy-First & Standalone**: Zero external dependencies, telemetry, or remote servers. Uses a bundled `JSZip` library running entirely in your browser session.
 
 ---
 
@@ -42,7 +42,7 @@
 
 ---
 
-## 📦 Installation Guide
+## Installation Guide
 
 ### Method 1: Load Unpacked (Chrome / Edge / Brave / Opera)
 
@@ -65,7 +65,7 @@
 
 ---
 
-## 📖 How to Use
+## How to Use
 
 1. Log in to your personal or enterprise account at [learning.oreilly.com](https://learning.oreilly.com).
 2. Open any book or interactive course reader (URL matching `https://learning.oreilly.com/library/view/...`).
@@ -78,7 +78,7 @@
 
 ---
 
-## 🛠️ Architecture & Technology Stack
+## Architecture & Technology Stack
 
 ```
 oreilly-epub-downloader/
@@ -99,13 +99,13 @@ oreilly-epub-downloader/
 
 ---
 
-## 🔍 Topics & SEO Keywords
+## Topics & SEO Keywords
 
 `oreilly-downloader` · `oreilly-epub` · `safari-books-downloader` · `epub-exporter` · `chrome-extension` · `manifest-v3` · `kindle-books` · `kobo` · `calibre` · `offline-reader` · `oreilly-learning` · `ebook-converter`
 
 ---
 
-## ⚖️ Legal & Disclaimer
+## Legal & Disclaimer
 
 This software is developed strictly for **educational and personal offline reading purposes**. 
 - Users are solely responsible for complying with the Terms of Service of O'Reilly Media.
@@ -114,6 +114,6 @@ This software is developed strictly for **educational and personal offline readi
 
 ---
 
-## 📄 License
+## License
 
 This project is open-source under the [MIT License](LICENSE).
