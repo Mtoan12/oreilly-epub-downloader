@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>O'Reilly EPUB Downloader</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="card">
+    <header class="header">
+      <div class="logo-title">
+        <span class="icon">📖</span>
+        <h2>O'Reilly Downloader</h2>
+      </div>
+      <span class="tag">EPUB 3</span>
+    </header>
+
+    <div id="status-container" class="status-container">
+      <div id="loading" class="spinner-box">
+        <div class="spinner"></div>
+        <p>Đang kiểm tra sách trên trang...</p>
+      </div>
+
+      <div id="not-found" class="not-found hidden">
+        <p class="warn-text">⚠️ Không tìm thấy sách O'Reilly trên tab hiện tại.</p>
+        <p class="hint">Hãy mở trang sách trên <code>learning.oreilly.com</code> rồi mở lại extension.</p>
+      </div>
+
+      <div id="book-info" class="book-info hidden">
+        <div class="cover-wrapper">
+          <img id="book-cover" class="book-cover" alt="Cover">
+        </div>
+        <div class="details">
+          <h3 id="book-title">Tên sách</h3>
+          <p id="book-authors" class="authors">Tác giả</p>
+          <p id="book-stats" class="stats">Chương: <strong id="chapter-count">0</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div id="options" class="options hidden">
+      <label class="checkbox-label">
+        <input type="checkbox" id="opt-images" checked>
+        <span>Tải kèm hình ảnh</span>
+      </label>
+      <div class="throttle-box">
+        <label for="opt-delay">Khoảng nghỉ giữa các chương:</label>
+        <select id="opt-delay">
+          <option value="200">Nhanh (200ms)</option>
+          <option value="500" selected>An toàn (500ms)</option>
+          <option value="1000">Chậm (1000ms)</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="progress-container" class="progress-container hidden">
+      <div class="progress-bar-bg">
+        <div id="progress-bar" class="progress-bar" style="width: 0%;"></div>
+      </div>
+      <p id="progress-text" class="progress-text">Đang chuẩn bị...</p>
+    </div>
+
+    <footer class="footer">
+      <button id="btn-download" class="btn primary-btn hidden" disabled>Tải EPUB</button>
+      <button id="btn-retry" class="btn secondary-btn hidden">Thử lại</button>
+    </footer>
+  </div>
+
+  <script src="../vendor/jszip.min.js"></script>
+  <script src="../scripts/oreilly-api.js"></script>
+  <script src="../scripts/epub-builder.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
