@@ -8,49 +8,70 @@
 <body>
   <div class="card">
     <header class="header">
-      <div class="logo-title">
-        <span class="icon">📖</span>
-        <h2>O'Reilly Downloader</h2>
+      <div class="brand">
+        <span class="app-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#089BB8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><circle cx="12" cy="8" r="2"/><path d="M9 13a3 3 0 0 1 6 0"/></svg>
+        </span>
+        <h2 class="app-name">O'Reilly Downloader</h2>
+        <span class="format-badge">EPUB 3</span>
       </div>
-      <span class="tag">EPUB 3</span>
+      <button id="btn-close" class="close-btn" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
     </header>
 
-    <div id="status-container" class="status-container">
-      <div id="loading" class="spinner-box">
-        <div class="spinner"></div>
-        <p>Checking the book on this page...</p>
-      </div>
-
-      <div id="not-found" class="not-found hidden">
-        <p class="warn-text">No O'Reilly book found on the current tab.</p>
-        <p class="hint">Open a book on <code>learning.oreilly.com</code>, then reopen this extension.</p>
-      </div>
-
-      <div id="book-info" class="book-info hidden">
-        <div class="cover-wrapper">
-          <img id="book-cover" class="book-cover" alt="Cover">
-        </div>
-        <div class="details">
-          <h3 id="book-title">Book Title</h3>
-          <p id="book-authors" class="authors">Authors</p>
-          <p id="book-stats" class="stats">Chapters: <strong id="chapter-count">0</strong></p>
-        </div>
-      </div>
+    <div id="loading" class="state-box">
+      <div class="spinner"></div>
+      <p>Checking the book on this page...</p>
     </div>
 
-    <div id="options" class="options hidden">
-      <label class="checkbox-label">
-        <input type="checkbox" id="opt-images" checked>
-        <span>Download illustrations and images</span>
-      </label>
-      <div class="throttle-box">
-        <label for="opt-delay">Delay between chapters:</label>
-        <select id="opt-delay">
-          <option value="200">Fast (200ms)</option>
-          <option value="500" selected>Safe (500ms)</option>
-          <option value="1000">Slow (1000ms)</option>
-        </select>
-      </div>
+    <div id="not-found" class="state-box hidden">
+      <p class="warn-text">No O'Reilly book found on the current tab.</p>
+      <p class="hint">Open a book on <code>learning.oreilly.com</code>, then reopen this extension.</p>
+      <button id="btn-retry" class="btn secondary-btn hidden">Retry</button>
+    </div>
+
+    <div id="main-grid" class="main-grid hidden">
+      <section id="book-info" class="book-card">
+        <div class="cover-wrapper">
+          <img id="book-cover" class="book-cover" alt="Book cover">
+        </div>
+        <div class="book-meta">
+          <h3 id="book-title" class="book-title">Book Title</h3>
+          <p id="book-authors" class="book-authors">Authors</p>
+          <span class="chapter-badge">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <span><strong id="chapter-count">0</strong> Chapters</span>
+          </span>
+        </div>
+      </section>
+
+      <section id="options" class="settings">
+        <label class="check-card" for="opt-images">
+          <input type="checkbox" id="opt-images" checked>
+          <span class="box" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </span>
+          <span class="check-label">Download illustrations &amp; diagrams</span>
+        </label>
+
+        <div class="delay-card">
+          <label for="opt-delay" class="delay-label">Delay</label>
+          <div class="select-wrap">
+            <select id="opt-delay">
+              <option value="200">Fast (200ms)</option>
+              <option value="500" selected>Safe (500ms)</option>
+              <option value="1000">Slow (1000ms)</option>
+            </select>
+            <svg class="chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+
+        <button id="btn-download" class="btn download-btn" disabled>
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+          <span id="btn-label">Download EPUB</span>
+        </button>
+      </section>
     </div>
 
     <div id="progress-container" class="progress-container hidden">
@@ -59,11 +80,6 @@
       </div>
       <p id="progress-text" class="progress-text">Preparing...</p>
     </div>
-
-    <footer class="footer">
-      <button id="btn-download" class="btn primary-btn hidden" disabled>Download EPUB</button>
-      <button id="btn-retry" class="btn secondary-btn hidden">Retry</button>
-    </footer>
   </div>
 
   <script src="../vendor/jszip.min.js"></script>

@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const loadingEl = document.getElementById("loading");
   const notFoundEl = document.getElementById("not-found");
-  const bookInfoEl = document.getElementById("book-info");
-  const optionsEl = document.getElementById("options");
+  const mainGridEl = document.getElementById("main-grid");
   const progressContainerEl = document.getElementById("progress-container");
   const progressBarEl = document.getElementById("progress-bar");
   const progressTextEl = document.getElementById("progress-text");
@@ -13,11 +12,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   const chapterCountEl = document.getElementById("chapter-count");
 
   const btnDownload = document.getElementById("btn-download");
+  const btnLabel = document.getElementById("btn-label");
   const btnRetry = document.getElementById("btn-retry");
+  const btnClose = document.getElementById("btn-close");
   const optImages = document.getElementById("opt-images");
   const optDelay = document.getElementById("opt-delay");
 
   let currentBook = null;
+
+  if (btnClose) {
+    btnClose.addEventListener("click", () => {
+      window.close();
+    });
+  }
 
   function updateProgress(text, percent) {
     progressContainerEl.classList.remove("hidden");
@@ -37,9 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   async function detectBook() {
     loadingEl.classList.remove("hidden");
     notFoundEl.classList.add("hidden");
-    bookInfoEl.classList.add("hidden");
-    optionsEl.classList.add("hidden");
-    btnDownload.classList.add("hidden");
+    mainGridEl.classList.add("hidden");
     btnRetry.classList.add("hidden");
     progressContainerEl.classList.add("hidden");
 
@@ -92,9 +97,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       loadingEl.classList.add("hidden");
       progressContainerEl.classList.add("hidden");
-      bookInfoEl.classList.remove("hidden");
-      optionsEl.classList.remove("hidden");
-      btnDownload.classList.remove("hidden");
+      mainGridEl.classList.remove("hidden");
       btnDownload.disabled = !(currentBook.chapters && currentBook.chapters.length > 0);
     } catch (err) {
       console.error(err);
@@ -108,7 +111,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!currentBook || !currentBook.chapters || currentBook.chapters.length === 0) return;
 
     btnDownload.disabled = true;
-    optionsEl.classList.add("hidden");
     updateProgress("Preparing download...", 0);
 
     const downloadImages = optImages.checked;
@@ -226,7 +228,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           a.remove();
         }
         btnDownload.disabled = false;
-        btnDownload.textContent = "Download Again";
+        if (btnLabel) btnLabel.textContent = "Download Again";
       });
 
     } catch (err) {
