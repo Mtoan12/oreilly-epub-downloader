@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "OReilly EPUB Downloader",
+  "name": "O'Reilly EPUB Downloader",
   "version": "1.0.0",
-  "description": "Download EPUB from OReilly Learning you can read on web.",
+  "description": "Download and convert O'Reilly Learning books to EPUB 3 format for offline reading on Kindle, Kobo, and Apple Books.",
   "permissions": ["activeTab", "scripting", "downloads", "storage"],
   "host_permissions": ["https://learning.oreilly.com/*", "https://*.oreilly.com/*"],
   "action": {

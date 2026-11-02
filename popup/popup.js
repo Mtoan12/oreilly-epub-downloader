@@ -62,14 +62,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
 
-      updateProgress("Đang lấy thông tin sách từ O'Reilly...", 10);
+      updateProgress("Fetching book info from O'Reilly...", 10);
       loadingEl.classList.remove("hidden");
 
       currentBook = await OreillyAPI.getBookInfo(bookId);
 
       if (!currentBook.chapters || currentBook.chapters.length === 0) {
         try {
-          updateProgress("Đang lấy mục lục từ trang web...", 30);
+          updateProgress("Extracting table of contents from web reader...", 30);
           const tocRes = await chrome.tabs.sendMessage(tab.id, { action: "getPageToc" });
           if (tocRes && tocRes.chapters && tocRes.chapters.length > 0) {
             currentBook.chapters = tocRes.chapters;
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       }
 
-      bookTitleEl.textContent = currentBook.title || "Không rõ tiêu đề";
+      bookTitleEl.textContent = currentBook.title || "Untitled Book";
       bookAuthorsEl.textContent = currentBook.authors || "O'Reilly Media";
       chapterCountEl.textContent = (currentBook.chapters ? currentBook.chapters.length : 0);
 
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     btnDownload.disabled = true;
     optionsEl.classList.add("hidden");
-    updateProgress("Bắt đầu chuẩn bị tải...", 0);
+    updateProgress("Preparing download...", 0);
 
     const downloadImages = optImages.checked;
     const delayMs = parseInt(optDelay.value, 10) || 500;
@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       // 1. Fetch cover image if available
       if (currentBook.cover) {
         try {
-          updateProgress("Đang tải ảnh bìa...", 2);
+          updateProgress("Downloading cover image...", 2);
           const buf = await EpubBuilder.fetchImageAsArrayBuffer(currentBook.cover);
           currentBook.coverData = buf;
           currentBook.coverExt = currentBook.cover.includes(".png") ? ".png" : ".jpg";
@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       for (let i = 0; i < total; i++) {
         const ch = chapters[i];
         const pct = Math.floor(5 + ((i + 1) / total) * 70);
-        updateProgress(`Đang tải chương ${i + 1}/${total}: ${ch.title}`, pct);
+        updateProgress(`Downloading chapter ${i + 1}/${total}: ${ch.title}`, pct);
 
         try {
           const rawHtml = await OreillyAPI.getChapterHtml(ch.url);
@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           console.error(`Error loading chapter ${i + 1}:`, err);
           chaptersData.push({
             title: ch.title,
-            body: `<p><em>Không thể tải nội dung chương này (${err.message}).</em></p>`
+            body: `<p><em>Failed to download chapter content (${err.message}).</em></p>`
           });
         }
 
@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const totalImages = imgUrlMap.size;
         for (const [url, fname] of imgUrlMap.entries()) {
           imgIndex++;
-          updateProgress(`Đang tải ảnh ${imgIndex}/${totalImages}...`, 75 + Math.floor((imgIndex / totalImages) * 15));
+          updateProgress(`Downloading image ${imgIndex}/${totalImages}...`, 75 + Math.floor((imgIndex / totalImages) * 15));
           try {
             const buf = await EpubBuilder.fetchImageAsArrayBuffer(url);
             images[fname] = buf;
@@ -200,13 +200,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       // 4. Build EPUB
-      updateProgress("Đang đóng gói file EPUB...", 92);
+      updateProgress("Packaging EPUB file...", 92);
       const blob = await EpubBuilder.buildEpub(currentBook, chaptersData, images, (msg, pct) => {
         updateProgress(msg, pct);
       });
 
       // 5. Trigger download
-      updateProgress("Hoàn thành! Đang lưu file về máy...", 100);
+      updateProgress("Completed! Saving file...", 100);
       const cleanTitle = (currentBook.title || "book").replace(/[/\\?%*:|"<>]/g, "_").trim();
       const filename = `${cleanTitle}.epub`;
       const blobUrl = URL.createObjectURL(blob);
@@ -226,12 +226,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           a.remove();
         }
         btnDownload.disabled = false;
-        btnDownload.textContent = "Tải lại";
+        btnDownload.textContent = "Download Again";
       });
 
     } catch (err) {
       console.error(err);
-      updateProgress(`Lỗi: ${err.message}`, 0);
+      updateProgress(`Error: ${err.message}`, 0);
       btnDownload.disabled = false;
       btnRetry.classList.remove("hidden");
     }
