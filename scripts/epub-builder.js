@@ -50,12 +50,14 @@
       manifest.push('<item id="' + id + '" href="images/' + fname + '" media-type="' + mimeOf(fname) + '"/>');
     });
 
+    let coverMeta = "";
     if (book.coverData && book.coverExt) {
       zip.file("OEBPS/images/cover" + book.coverExt, book.coverData, { binary: true });
       manifest.push('<item id="cover-img" href="images/cover' + book.coverExt + '" media-type="' + mimeOf(book.coverExt) + '" properties="cover-image"/>');
+      coverMeta = '<meta name="cover" content="cover-img"/>';
     }
 
-    const opf = '<?xml version="1.0" encoding="utf-8"?><package version="3.0" unique-identifier="bookid" xmlns="http://www.idpf.org/2007/opf"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="bookid">urn:orm:book:' + esc(book.id) + '</dc:identifier><dc:title>' + esc(book.title) + '</dc:title><dc:creator>' + esc(book.authors) + '</dc:creator><dc:language>' + esc(book.language || "en") + '</dc:language><dc:publisher>' + esc(book.publisher || "OReilly Media") + '</dc:publisher><meta property="dcterms:modified">' + new Date().toISOString().replace(/\.\d+Z$/, "Z") + '</meta></metadata><manifest>' + manifest.join("") + '</manifest><spine>' + spine.join("") + '</spine></package>';
+    const opf = '<?xml version="1.0" encoding="utf-8"?><package version="3.0" unique-identifier="bookid" xmlns="http://www.idpf.org/2007/opf"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="bookid">urn:orm:book:' + esc(book.id) + '</dc:identifier><dc:title>' + esc(book.title) + '</dc:title><dc:creator>' + esc(book.authors) + '</dc:creator><dc:language>' + esc(book.language || "en") + '</dc:language><dc:publisher>' + esc(book.publisher || "OReilly Media") + '</dc:publisher><meta property="dcterms:modified">' + new Date().toISOString().replace(/\.\d+Z$/, "Z") + '</meta>' + coverMeta + '</metadata><manifest>' + manifest.join("") + '</manifest><spine>' + spine.join("") + '</spine></package>';
     zip.file("OEBPS/content.opf", opf);
     zip.file("OEBPS/toc.xhtml", '<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"><head><title>Contents</title></head><body><nav epub:type="toc"><h1>Contents</h1><ol>' + navItems.join("") + '</ol></nav></body></html>');
     zip.file("OEBPS/toc.ncx", '<?xml version="1.0" encoding="utf-8"?><ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1"><head><meta name="dtb:uid" content="urn:orm:book:' + esc(book.id) + '"/></head><docTitle><text>' + esc(book.title) + '</text></docTitle><navMap>' + ncxItems.join("") + '</navMap></ncx>');

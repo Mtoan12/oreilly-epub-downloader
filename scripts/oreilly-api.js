@@ -146,9 +146,9 @@
     if (!cover && bookJson.images && bookJson.images.cover) {
       cover = bookJson.images.cover;
     }
-    // API v2 thường có cover file tại /files/cover.jpg hoặc similar nếu cover_url không có
-    if (!cover && bookJson.resources && bookJson.resources.cover) {
-      cover = bookJson.resources.cover;
+    // Fallback: endpoint cover CDN tiêu chuẩn của O'Reilly hỗ trợ mọi đầu sách
+    if (!cover && bookId) {
+      cover = BASE + "/covers/urn:orm:book:" + encodeURIComponent(bookId) + "/400w/";
     }
 
     const publisher = bookJson.publisher_name || bookJson.publisher || "O'Reilly Media";
