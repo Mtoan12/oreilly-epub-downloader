@@ -33,7 +33,10 @@
       const name = slug(i) + ".xhtml";
       const id = slug(i);
       const title = ch.title || ("Chapter " + (i + 1));
-      const xhtml = '<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><title>' + esc(title) + '</title><link rel="stylesheet" href="../styles/stylesheet.css"/></head><body><h1>' + esc(title) + '</h1>' + ch.body + '</body></html>';
+      // Tránh lặp tiêu đề nếu trong nội dung chapter đã có thẻ heading <h1>
+      const hasHeading = /<h1[\s>]/i.test(ch.body || "");
+      const headingHtml = hasHeading ? "" : ('<h1>' + esc(title) + '</h1>');
+      const xhtml = '<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><title>' + esc(title) + '</title><link rel="stylesheet" href="../styles/stylesheet.css"/></head><body>' + headingHtml + (ch.body || "") + '</body></html>';
       zip.file("OEBPS/chapters/" + name, xhtml);
       manifest.push('<item id="' + id + '" href="chapters/' + name + '" media-type="application/xhtml+xml"/>');
       spine.push('<itemref idref="' + id + '"/>');

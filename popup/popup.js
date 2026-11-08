@@ -141,10 +141,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         updateProgress(`Downloading chapter ${i + 1}/${total}: ${ch.title}`, pct);
 
         try {
-          const rawHtml = await OreillyAPI.getChapterHtml(ch.url);
-          const { bodyHtml, doc } = OreillyAPI.extractMainContent(rawHtml, ch.url);
+          const rawResult = await OreillyAPI.getChapterHtml(ch);
+          const rawHtml = typeof rawResult === "string" ? rawResult : (rawResult.html || "");
+          const baseUrl = (typeof rawResult === "object" && rawResult.contentBaseUrl) ? rawResult.contentBaseUrl : (ch.chapterApiUrl || ch.url || "");
+          const { bodyHtml, doc } = OreillyAPI.extractMainContent(rawHtml, baseUrl);
 
-          let processedBody = bodyHtml;
+          if (!bodyHtml || bodyHtml.trim().length === 0) {
+            console.warn(`Chapter ${i + 1} returned empty content from:`, ch);
+          }
+
+          let processedBody = bodyHtml || `<p><em>Content could not be fetched for this chapter.</em></p>`;
 
           // Collect images if enabled
           if (downloadImages && doc) {
@@ -154,7 +160,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               if (!src || src.startsWith("data:")) continue;
 
               let absUrl;
-              try { absUrl = new URL(src, ch.url).href; } catch (e) { continue; }
+              try { absUrl = new URL(src, baseUrl).href; } catch (e) { continue; }
 
               let localName;
               if (imgUrlMap.has(absUrl)) {
