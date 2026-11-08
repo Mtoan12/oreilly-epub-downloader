@@ -3,4 +3,5 @@ Thumbs.db
 *.Zone.Identifier
 *.zip
 *.crx
-debug/
+debug/*.epub
+debug/epub-extracted/
